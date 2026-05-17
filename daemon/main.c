@@ -13,8 +13,7 @@
 #include <errno.h>
 
 #include "../include/log/log.h"
-
-#define PID_FILE "/var/run/iaasd.pid"
+#define PID_FILE "/var/run/daemon.pid"
 
 volatile sig_atomic_t daemon_running = 1;
 
@@ -60,6 +59,8 @@ void ensure_single_instance() {
     }
 }
 
+// \brief : Create a daemon process and setup in background
+// using fork
 void daemonize() {
     pid_t pid;
     int fd;
