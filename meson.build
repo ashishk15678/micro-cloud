@@ -1,22 +1,8 @@
-project(
-  'cloud',
-  'c',
-  meson_version : '>= 1.3.0',
+project('micro-cloud', 'c',
   version : '0.1',
-  default_options : ['warning_level=3'],
-)
+  default_options : ['warning_level=3', 'c_std=gnu11'])
 
-dependencies = [
-]
+inc_dir = include_directories('include')
 
 subdir('daemon')
 subdir('client')
-
-exe = executable(
-  'micro-cloud',
-  sources,
-  dependencies : dependencies,
-  install : true,
-)
-
-test('basic', exe)
