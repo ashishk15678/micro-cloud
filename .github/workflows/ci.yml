@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -44,9 +47,14 @@ jobs:
       - name: Compile sanitized binaries
         run: meson compile -C build-sanitize
 
+      - name: Run tests with sanitizers enabled
+        run: meson test -C build-sanitize --print-errorlogs
+
       - name: Run binaries with sanitizer leak checks
         env:
           ASAN_OPTIONS: detect_leaks=1:strict_string_checks=1:halt_on_error=1
           UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
         run: |
-          ./build-sanitize/client/client > /dev/null
+          client_bin="$(find build-sanitize -type f -executable -name client | head -n 1)"
+          test -n "$client_bin"
+          "$client_bin" > /dev/null
