@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y meson ninja-build
+
+      - name: Configure project
+        run: meson setup build
+
+      - name: Compile project
+        run: meson compile -C build
+
+      - name: Run unit and integration tests
+        run: meson test -C build --print-errorlogs
+
+  sanitizers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y meson ninja-build
+
+      - name: Configure project with sanitizers
+        run: meson setup build-sanitize -Db_sanitize=address,undefined --buildtype=debug
+
+      - name: Compile sanitized binaries
+        run: meson compile -C build-sanitize
+
+      - name: Run binaries with sanitizer leak checks
+        env:
+          ASAN_OPTIONS: detect_leaks=1:strict_string_checks=1:halt_on_error=1
+          UBSAN_OPTIONS: print_stacktrace=1:halt_on_error=1
+        run: |
+          ./build-sanitize/client/client > /dev/null
