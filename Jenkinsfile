@@ -33,7 +33,10 @@ pipeline {
 
     stage('Configure') {
       steps {
-        sh 'meson setup build'
+        sh '''
+          rm -rf build
+          meson setup build
+        '''
       }
     }
 
@@ -52,6 +55,8 @@ pipeline {
     stage('Sanitizer leak check') {
       steps {
         sh '''
+          rm -rf build-sanitize
+
           meson setup build-sanitize \
             -Db_sanitize=address,undefined \
             --buildtype=debug
