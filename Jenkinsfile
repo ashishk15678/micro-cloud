@@ -8,14 +8,7 @@ pipeline {
       }
     }
 
-    stage('Install dependencies') {
-      steps {
-        sh '''
-          sudo apt-get update
-          sudo apt-get install -y meson ninja-build
-        '''
-      }
-    }
+    
 
     stage('Configure') {
       steps {
