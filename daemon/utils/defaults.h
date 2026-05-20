@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2026 Ashish Kumar <15678ashishk@gmail.com>
+
 #pragma once
 
 #include <stdint.h>
