@@ -1,7 +1,11 @@
 
 
 daemon_sources = [
-  'main.c'
+  'main.c',
+  'utils/log.c',
+  'utils/password.c',
+  'utils/state.c',
+  'utils/instance.c'
 ]
 
 executable('daemon',
